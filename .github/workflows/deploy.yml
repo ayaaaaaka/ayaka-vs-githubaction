@@ -29,17 +29,18 @@ jobs:
           echo "deploy-prodはmainにマージされたときだけ回れ"
   deploy-sandbox:
     if: |
-      ${{(
-          github.event_name == 'push'
-          && github.ref_name != 'main'
-          && github.actor != 'dependabot[bot]'
-          && github.actor != 'renovate[bot]'
-        )
-        || (
-          github.event_name == 'pull_request'
-          && github.event.action == 'labeled'
-          && github.event.label.name == 'deploy-sandbox'
-        )}}
+      (
+        github.event_name == 'push'
+        && github.ref_name != 'main'
+        && github.actor != 'dependabot[bot]'
+        && github.actor != 'renovate[bot]'
+      )
+      ||
+      (
+        github.event_name == 'pull_request'
+        && github.event.action == 'labeled'
+        && github.event.label.name == 'deploy-sandbox'
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Debug GitHub context
