@@ -30,10 +30,8 @@ jobs:
   deploy-sandbox:
     if: |
       (
-        github.event_name == 'push'
-        && github.ref_name != 'main'
-        && github.actor != 'dependabot[bot]'
-        && github.actor != 'renovate[bot]'
+        github.event_name == 'pull_request'
+        && github.event.action == 'synchronize'
       )
       ||
       (
