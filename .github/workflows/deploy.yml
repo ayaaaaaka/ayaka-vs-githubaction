@@ -34,3 +34,7 @@ jobs:
           && github.event.label.name == 'deploy-sandbox'
         )}}
     runs-on: ubuntu-latest
+    steps:
+      - name: Debug GitHub context
+        run: |
+          echo "deploy-sandbox 回ってますがな"
