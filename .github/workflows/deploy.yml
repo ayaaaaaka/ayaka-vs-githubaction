@@ -1,0 +1,36 @@
+name: deploy
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+    types: [opened, synchronize, labeled]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug GitHub context
+        run: |
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.actor: ${{ github.actor }}"
+  deploy-sandbox:
+    if: |
+      ${{(
+          github.event_name == 'push'
+          && github.ref_name != 'main'
+          && github.actor != 'dependabot[bot]'
+          && github.actor != 'renovate[bot]'
+        )
+        || (
+          github.event_name == 'pull_request'
+          && github.ref_name != 'main'
+          && github.event.action == 'labeled'
+          && github.event.label.name == 'deploy-sandbox'
+        )}}
+    runs-on: ubuntu-latest
