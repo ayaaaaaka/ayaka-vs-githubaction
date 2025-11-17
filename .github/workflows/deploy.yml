@@ -20,6 +20,13 @@ jobs:
           echo "github.event_name: ${{ github.event_name }}"
           echo "github.ref_name: ${{ github.ref_name }}"
           echo "github.actor: ${{ github.actor }}"
+  deploy-prod:
+    if: ${{ github.ref_name == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug GitHub context
+        run: |
+          echo "deploy-prodはmainにマージされたときだけ回れ"
   deploy-sandbox:
     if: |
       ${{(
