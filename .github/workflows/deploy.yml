@@ -20,6 +20,7 @@ jobs:
           echo "github.event_name: ${{ github.event_name }}"
           echo "github.ref_name: ${{ github.ref_name }}"
           echo "github.actor: ${{ github.actor }}"
+          echo "github.event.action: ${{ github.event.action }}"
   deploy-prod:
     if: ${{ github.ref_name == 'main' }}
     runs-on: ubuntu-latest
@@ -30,10 +31,13 @@ jobs:
   deploy-sandbox:
     if: |
       (
-        github.event_name == 'push'
-        && github.ref_name != 'main'
-        && github.actor != 'dependabot[bot]'
-        && github.actor != 'renovate[bot]'
+        github.event_name == 'pull_request'
+        && github.event.action == 'opened'
+      )
+      ||
+      (
+        github.event_name == 'pull_request'
+        && github.event.action == 'synchronize'
       )
       ||
       (
