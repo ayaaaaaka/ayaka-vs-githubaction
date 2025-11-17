@@ -1,8 +1,9 @@
 name: deploy
 on:
   push:
-    branches-ignore:
+    branches:
       - main
+      - '*'
   pull_request:
     branches:
       - '*'
@@ -23,6 +24,7 @@ jobs:
     if: |
       ${{(
           github.event_name == 'push'
+          && github.ref_name != 'main'
           && github.actor != 'dependabot[bot]'
           && github.actor != 'renovate[bot]'
         )
